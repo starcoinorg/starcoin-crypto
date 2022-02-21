@@ -1,6 +1,7 @@
 [workspace]
 
 members = [
+    "crates/diem-crypto",
     "crypto",
 ]
 
