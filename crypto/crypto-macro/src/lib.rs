@@ -104,7 +104,13 @@ pub fn hasher_dispatch(input: TokenStream) -> TokenStream {
                 self.0.update(bytes);
             }
 
+            #[cfg(not(feature = "avx512f"))]
             fn finish(self) -> starcoin_crypto::hash::HashValue {
+                self.0.finish()
+            }
+
+            #[cfg(feature = "avx512f")]
+            fn finish(mut self) -> starcoin_crypto::hash::HashValue {
                 self.0.finish()
             }
         }
