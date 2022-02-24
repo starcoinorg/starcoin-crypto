@@ -177,7 +177,12 @@ impl crate::hash::CryptoHasher for TestDiemCryptoHasher {
     fn update(&mut self, bytes: &[u8]) {
         self.0.update(bytes);
     }
+    #[cfg(not(feature = "avx512f"))]
     fn finish(self) -> crate::hash::HashValue {
+        self.0.finish()
+    }
+    #[cfg(feature = "avx512f")]
+    fn finish(mut self) -> crate::hash::HashValue {
         self.0.finish()
     }
 }

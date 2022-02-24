@@ -34,6 +34,7 @@ x25519-dalek = { version = "0.1.0", package = "x25519-dalek-fiat", default-featu
 aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
+libc = "^0.2"
 
 [dev-dependencies]
 bitvec = "0.19.4"
@@ -54,6 +55,8 @@ fuzzing = ["proptest", "proptest-derive", "cloneable-private-keys"]
 fiat = ["curve25519-dalek/fiat_u64_backend", "ed25519-dalek/fiat_u64_backend", "x25519-dalek/fiat_u64_backend"]
 u64 = ["curve25519-dalek/u64_backend", "ed25519-dalek/u64_backend", "x25519-dalek/u64_backend"]
 u32 = ["curve25519-dalek/u32_backend", "ed25519-dalek/u32_backend", "x25519-dalek/u32_backend"]
+#cargo build --release --features=avx512f
+avx512f = []
 
 [[bench]]
 name = "noise"
@@ -62,3 +65,10 @@ harness = false
 [[bench]]
 name = "ed25519"
 harness = false
+
+[build-dependencies]
+cc = "1.0"
+bindgen="0.59.2"
+
+[lib]
+name = "avx512_sha3"

@@ -388,7 +388,12 @@ pub fn hasher_dispatch(input: TokenStream) -> TokenStream {
                 self.0.update(bytes);
             }
 
+    #[cfg(not(feature = "avx512f"))]
             fn finish(self) -> diem_crypto::hash::HashValue {
+                self.0.finish()
+            }
+    #[cfg(feature = "avx512f")]
+            fn finish(mut self) -> diem_crypto::hash::HashValue {
                 self.0.finish()
             }
         }
