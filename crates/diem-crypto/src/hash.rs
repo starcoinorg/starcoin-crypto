@@ -115,6 +115,9 @@ use std::{
     fmt,
     str::FromStr,
 };
+use schemars::gen::SchemaGenerator;
+use schemars::JsonSchema;
+use schemars::schema::{InstanceType, Schema, SchemaObject};
 #[cfg(not(feature = "avx512f"))]
 use tiny_keccak::{Hasher, Sha3};
 
@@ -775,6 +778,21 @@ impl<T: ser::Serialize + ?Sized> TestOnlyHash for T {
         let mut hasher = TestOnlyHasher::default();
         hasher.update(&bytes);
         hasher.finish()
+    }
+}
+impl JsonSchema for HashValue {
+    
+    fn schema_name() -> String {
+        "HashValue".to_owned()
+    }
+
+    fn json_schema(_: &mut SchemaGenerator) -> Schema {
+        SchemaObject {
+            instance_type: Some(InstanceType::String.into()),
+            format: Some("HashValue".to_owned()),
+            ..Default::default()
+        }
+            .into()
     }
 }
 

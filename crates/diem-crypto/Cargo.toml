@@ -35,6 +35,7 @@ aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
 libc = "^0.2"
+schemars = {git = "https://github.com/starcoinorg/schemars", rev= "6972da92f4360e1779168bb3fe0274c521d324e2"}
 
 [dev-dependencies]
 bitvec = "0.19.4"
