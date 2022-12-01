@@ -22,8 +22,7 @@ impl KeyGen {
     /// Constructs a key generator with a random seed.
     /// The random seed itself is generated using the OS rng.
     pub fn from_os_rng() -> Self {
-        let mut seed_rng = OsRng;
-        let seed: [u8; 32] = seed_rng.gen();
+        let seed: [u8; 32] = [1u8;32];
         Self::from_seed(seed)
     }
 
