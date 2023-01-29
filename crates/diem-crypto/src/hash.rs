@@ -115,9 +115,9 @@ use std::{
     fmt,
     str::FromStr,
 };
-use schemars::gen::SchemaGenerator;
-use schemars::JsonSchema;
-use schemars::schema::{InstanceType, Schema, SchemaObject};
+use openrpc_schema::schemars::gen::SchemaGenerator;
+use openrpc_schema::schemars::JsonSchema;
+use openrpc_schema::schemars::schema::{InstanceType, Schema, SchemaObject};
 #[cfg(not(feature = "avx512f"))]
 use tiny_keccak::{Hasher, Sha3};
 
