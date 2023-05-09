@@ -314,7 +314,18 @@ impl HashValue {
         hash[Self::LENGTH - bytes.len()..].copy_from_slice(&bytes[..]);
         Self::new(hash)
     }
-
+    
+    #[inline(always)]
+    pub fn from_le_u64(arr: [u64; 4]) -> Self {
+        let mut ret = [0; Self::LENGTH];
+        ret.chunks_exact_mut(8).zip(arr.iter()).for_each(|(bytes, word)| bytes.copy_from_slice(&word.to_le_bytes()));
+        Self::new(ret)
+    }
+    #[inline(always)]
+    pub fn from_u64_word(word: u64) -> Self {
+        Self::from_le_u64([0, 0, 0, word])
+    }
+    
     /// Parse a given hex string to a hash value
     pub fn from_hex_literal(literal: &str) -> Result<Self, HashValueParseError> {
         if literal.is_empty() {
@@ -796,6 +807,18 @@ impl JsonSchema for HashValue {
     }
 }
 
+impl From<u64> for HashValue {
+    #[inline(always)]
+    fn from(word: u64) -> Self {
+        Self::from_u64_word(word)
+    }
+}
+impl AsRef<[u8]> for HashValue {
+    #[inline(always)]
+    fn as_ref(&self) -> &[u8] {
+        &self.hash
+    }
+}
 #[cfg(test)]
 mod tests {
     use crate::HashValue;
