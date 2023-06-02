@@ -35,7 +35,7 @@ aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
 libc = "^0.2"
-openrpc-schema = {git = "https://github.com/starcoinorg/openrpc-rs",rev = "f8ab047e30927cdf2f605b61a219c975d6c4f666"}
+openrpc-schema = {git = "https://github.com/starcoinorg/openrpc-rs",rev = "a1239efecefec6494673536367b80aba5ca4d852"}
 
 [dev-dependencies]
 bitvec = "0.19.4"
