@@ -4,7 +4,7 @@
 #![forbid(unsafe_code)]
 
 //! A library supplying various cryptographic primitives
-// just wrap diem-crypto.
+// just wrap diem-crypto and aptos-crypto
 
 pub mod ed25519 {
     use crate::keygen::KeyGen;

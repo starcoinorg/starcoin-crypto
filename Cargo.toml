@@ -2,6 +2,7 @@
 
 members = [
     "crates/diem-crypto",
+    "crates/aptos-crypto",
     "crypto",
 ]
 
