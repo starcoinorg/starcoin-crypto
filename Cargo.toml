@@ -1,4 +1,5 @@
 [workspace]
+resolver = "2"
 
 members = [
     "crates/diem-crypto",
@@ -9,6 +10,7 @@ members = [
 default-members = [
     "crypto",
 ]
+
 
 [profile.dev]
 panic = "unwind"
