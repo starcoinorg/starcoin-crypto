@@ -2,7 +2,7 @@
 
 members = [
     "crates/diem-crypto",
-    "crates/aptos-crypto",
+    #"crates/aptos-crypto",
     "crypto",
 ]
 
