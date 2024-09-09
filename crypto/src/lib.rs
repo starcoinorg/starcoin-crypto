@@ -38,6 +38,26 @@ pub mod traits {
 pub use crate::hash::HashValue;
 pub use crate::traits::*;
 
+
+pub use aptos_crypto::{
+    bls12381,
+    asymmetric_encryption,
+    bulletproofs,
+    // ed25519,
+    elgamal,
+    encoding_type,
+    error,
+    hkdf,
+    noise,
+    secp256k1_ecdsa,
+    secp256r1_ecdsa,
+    // traits::*,
+    validatable,
+    x25519,
+    poseidon_bn254,
+};
+
+
 // Reexport once_cell for use in CryptoHasher Derive implementation
 #[doc(hidden)]
 pub use once_cell as _once_cell;

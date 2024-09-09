@@ -2615,6 +2615,8 @@ name = "starcoin-crypto"
 version = "1.10.0-rc.2"
 dependencies = [
  "anyhow",
+ "aptos-crypto",
+ "aptos-crypto-derive",
  "bcs 0.1.6",
  "diem-crypto",
  "diem-crypto-derive",
@@ -3321,8 +3323,3 @@ dependencies = [
  "quote 1.0.37",
  "syn 2.0.77",
 ]
-
-[[patch.unused]]
-name = "serde-reflection"
-version = "0.3.5"
-source = "git+https://github.com/aptos-labs/serde-reflection?rev=73b6bbf748334b71ff6d7d09d06a29e3062ca075#73b6bbf748334b71ff6d7d09d06a29e3062ca075"

@@ -13,6 +13,8 @@ hex = "0.4.3"
 anyhow = "1.0"
 diem-crypto = { package="diem-crypto",  path = "../crates/diem-crypto", features = ["fuzzing"] }
 diem-crypto-derive = { package="diem-crypto-derive",  path = "../crates/diem-crypto-derive"  }
+aptos-crypto = { package="aptos-crypto",  path = "../crates/aptos-crypto", features = ["fuzzing"] }
+aptos-crypto-derive = { package="aptos-crypto-derive",  path = "../crates/aptos-crypto-derive"  }
 bcs = "0.1.3"
 crypto-macro = { package="starcoin-crypto-macro", path = "./crypto-macro"}
 rand = "0.8.4"
