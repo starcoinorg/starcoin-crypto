@@ -27,7 +27,6 @@ pub mod hash;
 pub mod keygen;
 pub mod multi_ed25519;
 
-
 pub mod test_utils {
     pub use diem_crypto::test_utils::*;
 }
@@ -39,31 +38,6 @@ pub mod traits {
 pub use crate::hash::HashValue;
 pub use crate::traits::*;
 
-pub use aptos_crypto::{
-    bls12381,
-    asymmetric_encryption,
-    bulletproofs,
-    // ed25519,
-    elgamal,
-    encoding_type,
-    error,
-    hkdf,
-    noise,
-    secp256k1_ecdsa,
-    secp256r1_ecdsa,
-    // traits::*,
-    validatable,
-    x25519,
-    poseidon_bn254,
-    // hash::*,
-    hash::{DummyHasher, CryptoHasher},
-};
-
-pub use aptos_crypto_derive::{
-    CryptoHasher
-};
-
-
 // Reexport once_cell for use in CryptoHasher Derive implementation
 #[doc(hidden)]
 pub use once_cell as _once_cell;
@@ -72,4 +46,9 @@ pub use serde_name as _serde_name;
 
 pub mod derive {
     pub use diem_crypto_derive::{DeserializeKey, SerializeKey, SilentDebug, SilentDisplay};
+}
+
+pub mod compile_v2 {
+    pub use aptos_crypto::*;
+    pub use aptos_crypto_derive::*;
 }
