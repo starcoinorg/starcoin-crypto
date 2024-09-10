@@ -4,12 +4,14 @@
 #![forbid(unsafe_code)]
 
 //! A library supplying various cryptographic primitives
-// just wrap diem-crypto and aptos-crypto
+// just wr
+// ap diem-crypto and aptos-crypto
 
 pub mod ed25519 {
     use crate::keygen::KeyGen;
-    use crate::{Genesis, PrivateKey};
-    pub use diem_crypto::ed25519::*;
+    use crate::{Genesis};
+    pub use aptos_crypto::ed25519::{Ed25519PublicKey, Ed25519PrivateKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH, ED25519_PUBLIC_KEY_LENGTH};
+    use aptos_crypto::PrivateKey;
 
     pub fn random_public_key() -> Ed25519PublicKey {
         KeyGen::from_os_rng().generate_keypair().1
@@ -28,11 +30,11 @@ pub mod keygen;
 pub mod multi_ed25519;
 
 pub mod test_utils {
-    pub use diem_crypto::test_utils::*;
+    pub use aptos_crypto::test_utils::*;
 }
 
 pub mod traits {
-    pub use diem_crypto::traits::*;
+    pub use aptos_crypto::traits::*;
 }
 
 pub use crate::hash::HashValue;
@@ -45,10 +47,5 @@ pub use once_cell as _once_cell;
 pub use serde_name as _serde_name;
 
 pub mod derive {
-    pub use diem_crypto_derive::{DeserializeKey, SerializeKey, SilentDebug, SilentDisplay};
-}
-
-pub mod compiler_v2 {
-    pub use aptos_crypto::*;
-    pub use aptos_crypto_derive::*;
+    pub use aptos_crypto_derive::{DeserializeKey, SerializeKey, SilentDebug, SilentDisplay};
 }

@@ -1,7 +1,7 @@
 // Copyright (c) The Starcoin Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::ed25519::{
+use aptos_crypto::ed25519::{
     Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH,
     ED25519_PUBLIC_KEY_LENGTH,
 };
@@ -9,7 +9,7 @@ use crate::hash::{CryptoHash, CryptoHasher};
 use crate::{CryptoMaterialError, Length, PrivateKey, Signature, ValidCryptoMaterial};
 use crate::{SigningKey, Uniform};
 use anyhow::{anyhow, bail, ensure, Result};
-use diem_crypto::multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature};
+use aptos_crypto::multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::convert::TryFrom;
