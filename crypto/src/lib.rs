@@ -55,7 +55,7 @@ pub use aptos_crypto::{
     validatable,
     x25519,
     poseidon_bn254,
-    hash::*,
+    // hash::*,
 };
 
 pub use aptos_crypto_derive::{
