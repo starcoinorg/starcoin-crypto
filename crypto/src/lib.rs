@@ -48,7 +48,7 @@ pub mod derive {
     pub use diem_crypto_derive::{DeserializeKey, SerializeKey, SilentDebug, SilentDisplay};
 }
 
-pub mod compile_v2 {
+pub mod compiler_v2 {
     pub use aptos_crypto::*;
     pub use aptos_crypto_derive::*;
 }
