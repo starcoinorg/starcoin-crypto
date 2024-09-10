@@ -27,6 +27,7 @@ pub mod hash;
 pub mod keygen;
 pub mod multi_ed25519;
 
+
 pub mod test_utils {
     pub use diem_crypto::test_utils::*;
 }
@@ -54,6 +55,7 @@ pub use aptos_crypto::{
     validatable,
     x25519,
     poseidon_bn254,
+    hash::*,
 };
 
 pub use aptos_crypto_derive::{
