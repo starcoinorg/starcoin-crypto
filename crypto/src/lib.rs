@@ -38,7 +38,6 @@ pub mod traits {
 pub use crate::hash::HashValue;
 pub use crate::traits::*;
 
-
 pub use aptos_crypto::{
     bls12381,
     asymmetric_encryption,
@@ -55,6 +54,10 @@ pub use aptos_crypto::{
     validatable,
     x25519,
     poseidon_bn254,
+};
+
+pub use aptos_crypto_derive::{
+    CryptoHasher
 };
 
 
