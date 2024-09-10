@@ -56,6 +56,7 @@ pub use aptos_crypto::{
     x25519,
     poseidon_bn254,
     // hash::*,
+    hash::{DummyHasher, CryptoHasher},
 };
 
 pub use aptos_crypto_derive::{
