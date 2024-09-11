@@ -47,5 +47,5 @@ pub use once_cell as _once_cell;
 pub use serde_name as _serde_name;
 
 pub mod derive {
-    pub use aptos_crypto_derive::{DeserializeKey, SerializeKey, SilentDebug, SilentDisplay};
+    pub use aptos_crypto_derive::{CryptoHasher, DeserializeKey, SerializeKey, SilentDebug, SilentDisplay};
 }

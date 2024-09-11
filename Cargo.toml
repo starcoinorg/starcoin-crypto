@@ -6,10 +6,14 @@ members = [
     "crates/aptos-crypto",
     "crates/aptos-crypto-derive",
     "crypto",
+    "crypto/crypto-macro",
 ]
 
 default-members = [
+    "crates/aptos-crypto",
+    "crates/aptos-crypto-derive",
     "crypto",
+    "crypto/crypto-macro",
 ]
 
 [workspace.dependencies]
@@ -71,11 +75,14 @@ tiny-keccak = "2.0.2"
 typenum = "1.17.0"
 x25519-dalek = "1.2.0"
 starcoin-crypto = { path = "crypto" }
+starcoin-crypto-macro = { path = "crypto/crypto-macro"}
 aptos-crypto = { path = "crates/aptos-crypto" }
 aptos-crypto-derive = { path = "crates/aptos-crypto-derive" }
 diem-crypto = { package="diem-crypto",  path = "crates/diem-crypto", features = ["fuzzing"] }
 diem-crypto-derive = { package="diem-crypto-derive",  path = "crates/diem-crypto-derive"  }
-crypto-macro = { package="starcoin-crypto-macro", path = "crypto-macro"}
+syn = { version = "1.0.30", features = ["derive"] }
+quote = "1.0.6"
+proc-macro2 = "1.0.18"
 
 [profile.dev]
 panic = "unwind"

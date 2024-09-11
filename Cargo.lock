@@ -2620,6 +2620,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "starcoin-crypto-macro"
+version = "1.10.0-rc.2"
+dependencies = [
+ "proc-macro2 1.0.86",
+ "quote 1.0.37",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
