@@ -113,12 +113,15 @@ use std::{
     fmt,
     str::FromStr,
 };
+use openrpc_schema::schemars::gen::SchemaGenerator;
+use openrpc_schema::schemars::JsonSchema;
+use openrpc_schema::schemars::schema::{InstanceType, Schema, SchemaObject};
 use tiny_keccak::{Hasher, Sha3};
 
 /// A prefix used to begin the salt of every hashable structure. The salt
 /// consists in this global prefix, concatenated with the specified
 /// serialization name of the struct.
-pub(crate) const HASH_PREFIX: &[u8] = b"APTOS::";
+pub(crate) const HASH_PREFIX: &[u8] = b"STARCOIN::";
 
 /// Output value of our hash function. Intentionally opaque for safety and modularity.
 #[derive(Clone, Copy, Eq, Hash, PartialEq, PartialOrd, Ord)]
@@ -703,3 +706,20 @@ impl<T: ser::Serialize + ?Sized> TestOnlyHash for T {
         hasher.finish()
     }
 }
+
+impl JsonSchema for HashValue {
+
+    fn schema_name() -> String {
+        "HashValue".to_owned()
+    }
+
+    fn json_schema(_: &mut SchemaGenerator) -> Schema {
+        SchemaObject {
+            instance_type: Some(InstanceType::String.into()),
+            format: Some("HashValue".to_owned()),
+            ..Default::default()
+        }
+            .into()
+    }
+}
+
