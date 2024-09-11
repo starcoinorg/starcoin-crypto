@@ -123,7 +123,9 @@ impl MultiEd25519KeyShard {
         let signatures: Vec<(Ed25519Signature, u8)> = self
             .private_keys
             .iter()
-            .map(|(i, item)| (item.sign(message), *i as u8))
+            .map(|(i, item)| {
+                (item.sign(message).expect("sign message failed"), *i as u8)
+            })
             .collect();
 
         MultiEd25519SignatureShard::new(
