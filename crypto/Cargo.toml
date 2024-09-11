@@ -21,7 +21,6 @@ rand_core = { workspace = true }
 once_cell = { workspace = true }
 serde-name = { workspace = true }
 starcoin-crypto-macro = { workspace = true }
-openrpc-schema = { workspace = true }
 
 [features]
 default = []

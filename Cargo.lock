@@ -2613,7 +2613,6 @@ dependencies = [
  "diem-crypto-derive",
  "hex",
  "once_cell",
- "openrpc-schema",
  "rand 0.7.3",
  "rand_core 0.5.1",
  "serde",

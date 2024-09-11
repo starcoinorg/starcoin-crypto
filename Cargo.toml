@@ -74,7 +74,7 @@ sha3 = "0.9.1"
 signature = "2.1.0"
 static_assertions = "1.1.0"
 thiserror = "1.0.37"
-tiny-keccak = "2.0.2"
+tiny-keccak = { version = "2.0.2", features = ["sha3"] }
 typenum = "1.17.0"
 x25519-dalek = "1.2.0"
 starcoin-crypto = { path = "crypto" }
@@ -84,7 +84,6 @@ aptos-crypto-derive = { path = "crates/aptos-crypto-derive" }
 diem-crypto = { package="diem-crypto",  path = "crates/diem-crypto", features = ["fuzzing"] }
 diem-crypto-derive = { package="diem-crypto-derive",  path = "crates/diem-crypto-derive"  }
 syn = { version = "1.0.30", features = ["derive"] }
-
 
 
 [profile.dev]
