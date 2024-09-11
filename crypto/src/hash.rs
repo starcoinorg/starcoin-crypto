@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pub use aptos_crypto::hash::{CryptoHash, CryptoHasher, DefaultHasher, HashValue, TestOnlyHash};
-//pub use crypto_macro::{CryptoHash, CryptoHasher};
+pub use starcoin_crypto_macro::{CryptoHash, CryptoHasher};
 use once_cell::sync::Lazy;
 
 /// A type that implements `PlainCryptoHash` can be hashed by a cryptographic hash function and produce
