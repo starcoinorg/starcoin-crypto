@@ -9,8 +9,12 @@
 
 pub mod ed25519 {
     use crate::keygen::KeyGen;
-    use crate::{Genesis};
-    pub use aptos_crypto::ed25519::{Ed25519PublicKey, Ed25519PrivateKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH, ED25519_PUBLIC_KEY_LENGTH};
+    use crate::Genesis;
+    pub use aptos_crypto::ed25519::{
+        Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature,
+        ED25519_PRIVATE_KEY_LENGTH, ED25519_PUBLIC_KEY_LENGTH,
+        ED25519_SIGNATURE_LENGTH,
+    };
     use aptos_crypto::PrivateKey;
 
     pub fn random_public_key() -> Ed25519PublicKey {
@@ -35,6 +39,14 @@ pub mod test_utils {
 
 pub mod traits {
     pub use aptos_crypto::traits::*;
+}
+
+pub mod bls12381 {
+    pub use aptos_crypto::bls12381::*;
+}
+
+pub mod bulletproofs {
+    pub use aptos_crypto::bulletproofs::*;
 }
 
 pub use crate::hash::HashValue;
