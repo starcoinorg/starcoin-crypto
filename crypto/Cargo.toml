@@ -11,8 +11,6 @@ serde = { workspace = true }
 serde_bytes = { workspace = true }
 hex = { workspace = true }
 anyhow = { workspace = true }
-diem-crypto = { workspace = true, features = ["fuzzing"] }
-diem-crypto-derive = { workspace = true }
 aptos-crypto = { workspace = true, features = ["fuzzing"] }
 aptos-crypto-derive = { workspace = true }
 bcs = { workspace = true }
@@ -24,5 +22,4 @@ starcoin-crypto-macro = { workspace = true }
 
 [features]
 default = []
-fuzzing = ["diem-crypto/fuzzing", "aptos-crypto/fuzzing"]
-avx512f = ["diem-crypto/avx512f"]
+fuzzing = ["aptos-crypto/fuzzing"]
