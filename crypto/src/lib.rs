@@ -5,17 +5,13 @@
 
 //! A library supplying various cryptographic primitives
 // just wr
-// ap diem-crypto and aptos-crypto
+// ap aptos-crypto
 
 pub mod ed25519 {
     use crate::keygen::KeyGen;
     use crate::Genesis;
-    pub use aptos_crypto::ed25519::{
-        Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature,
-        ED25519_PRIVATE_KEY_LENGTH, ED25519_PUBLIC_KEY_LENGTH,
-        ED25519_SIGNATURE_LENGTH,
-    };
-    use aptos_crypto::PrivateKey;
+    pub use aptos_crypto::ed25519::*;
+    pub use aptos_crypto::PrivateKey;
 
     pub fn random_public_key() -> Ed25519PublicKey {
         KeyGen::from_os_rng().generate_keypair().1
@@ -59,5 +55,7 @@ pub use once_cell as _once_cell;
 pub use serde_name as _serde_name;
 
 pub mod derive {
-    pub use aptos_crypto_derive::{CryptoHasher, DeserializeKey, SerializeKey, SilentDebug, SilentDisplay};
+    pub use aptos_crypto_derive::{
+        CryptoHasher, DeserializeKey, SerializeKey, SilentDebug, SilentDisplay,
+    };
 }
