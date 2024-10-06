@@ -77,7 +77,7 @@ impl Signature {
             match s[i].cmp(&ORDER_HALF[i]) {
                 Ordering::Less => return true,
                 Ordering::Greater => return false,
-                _ => {},
+                _ => {}
             }
         }
         // At this stage S == ORDER_HALF which implies a non canonical S.

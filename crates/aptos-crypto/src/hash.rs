@@ -103,6 +103,9 @@ use bytes::Bytes;
 use hex::FromHex;
 use more_asserts::debug_assert_lt;
 use once_cell::sync::{Lazy, OnceCell};
+use openrpc_schema::schemars::gen::SchemaGenerator;
+use openrpc_schema::schemars::schema::{InstanceType, Schema, SchemaObject};
+use openrpc_schema::schemars::JsonSchema;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use rand::{rngs::OsRng, Rng};
@@ -113,9 +116,6 @@ use std::{
     fmt,
     str::FromStr,
 };
-use openrpc_schema::schemars::gen::SchemaGenerator;
-use openrpc_schema::schemars::JsonSchema;
-use openrpc_schema::schemars::schema::{InstanceType, Schema, SchemaObject};
 use tiny_keccak::{Hasher, Sha3};
 
 /// A prefix used to begin the salt of every hashable structure. The salt
@@ -286,6 +286,25 @@ impl HashValue {
         let bytes = v.to_be_bytes();
         hash[Self::LENGTH - bytes.len()..].copy_from_slice(&bytes[..]);
         Self::new(hash)
+    }
+    /// Parse a given hex string to a hash value
+    pub fn from_hex_literal(literal: &str) -> Result<Self, HashValueParseError> {
+        if literal.is_empty() {
+            return Err(HashValueParseError);
+        }
+        let literal = literal.strip_prefix("0x").unwrap_or_else(|| literal);
+        let hex_len = literal.len();
+        // If the string is too short, pad it
+        if hex_len < Self::LENGTH * 2 {
+            let mut hex_str = String::with_capacity(Self::LENGTH * 2);
+            for _ in 0..Self::LENGTH * 2 - hex_len {
+                hex_str.push('0');
+            }
+            hex_str.push_str(&literal);
+            Self::from_hex(hex_str)
+        } else {
+            Self::from_hex(&literal)
+        }
     }
 }
 
@@ -708,7 +727,6 @@ impl<T: ser::Serialize + ?Sized> TestOnlyHash for T {
 }
 
 impl JsonSchema for HashValue {
-
     fn schema_name() -> String {
         "HashValue".to_owned()
     }
@@ -719,7 +737,6 @@ impl JsonSchema for HashValue {
             format: Some("HashValue".to_owned()),
             ..Default::default()
         }
-            .into()
+        .into()
     }
 }
-
