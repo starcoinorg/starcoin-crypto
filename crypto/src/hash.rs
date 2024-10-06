@@ -1,9 +1,11 @@
 // Copyright (c) The Starcoin Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-pub use aptos_crypto::hash::{CryptoHash, CryptoHasher, DefaultHasher, HashValue, TestOnlyHash, DummyHasher};
-pub use starcoin_crypto_macro::{CryptoHash, CryptoHasher};
+pub use aptos_crypto::hash::{
+    CryptoHash, CryptoHasher, DefaultHasher, DummyHasher, HashValue, TestOnlyHash,
+};
 use once_cell::sync::Lazy;
+pub use starcoin_crypto_macro::{CryptoHash, CryptoHasher};
 
 /// A type that implements `PlainCryptoHash` can be hashed by a cryptographic hash function and produce
 /// a `HashValue`.

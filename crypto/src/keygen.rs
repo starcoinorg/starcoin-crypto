@@ -15,7 +15,6 @@ use rand::{
 #[derive(Debug)]
 pub struct KeyGen(StdRng);
 
-
 impl KeyGen {
     /// Constructs a key generator with a specific seed.
     pub fn from_seed(seed: [u8; 32]) -> Self {
@@ -52,5 +51,4 @@ impl KeyGen {
         let public_key = private_key.public_key();
         (private_key, public_key)
     }
-
 }

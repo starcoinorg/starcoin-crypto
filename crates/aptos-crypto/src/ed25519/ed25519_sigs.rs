@@ -77,7 +77,7 @@ impl Ed25519Signature {
             match s[i].cmp(&L[i]) {
                 Ordering::Less => return true,
                 Ordering::Greater => return false,
-                _ => {},
+                _ => {}
             }
         }
         // As this stage S == L which implies a non canonical S.

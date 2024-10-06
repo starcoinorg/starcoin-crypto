@@ -1,14 +1,14 @@
 // Copyright (c) The Starcoin Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::ed25519::{
-    Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH,
-    ED25519_PUBLIC_KEY_LENGTH,
-};
 use crate::hash::{CryptoHash, CryptoHasher};
 use crate::{CryptoMaterialError, Length, PrivateKey, Signature, ValidCryptoMaterial};
 use crate::{SigningKey, Uniform};
 use anyhow::{anyhow, bail, ensure, Result};
+use aptos_crypto::ed25519::{
+    Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH,
+    ED25519_PUBLIC_KEY_LENGTH,
+};
 use aptos_crypto::multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
@@ -123,9 +123,7 @@ impl MultiEd25519KeyShard {
         let signatures: Vec<(Ed25519Signature, u8)> = self
             .private_keys
             .iter()
-            .map(|(i, item)| {
-                (item.sign(message).expect("sign message failed"), *i as u8)
-            })
+            .map(|(i, item)| (item.sign(message).expect("sign message failed"), *i as u8))
             .collect();
 
         MultiEd25519SignatureShard::new(
