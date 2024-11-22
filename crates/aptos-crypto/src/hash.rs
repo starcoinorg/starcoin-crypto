@@ -109,7 +109,7 @@ use openrpc_schema::schemars::JsonSchema;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use rand::{rngs::OsRng, Rng};
-use serde::{de, ser, Deserialize, Serialize};
+use serde::{de, ser};
 use std::{
     self,
     convert::{AsRef, TryFrom},
@@ -746,12 +746,6 @@ impl From<u64> for HashValue {
         Self::from_u64_word(word)
     }
 }
-impl AsRef<[u8]> for HashValue {
-    #[inline(always)]
-    fn as_ref(&self) -> &[u8] {
-        &self.hash
-    }
-}
 
 #[cfg(test)]
 mod tests {
@@ -764,8 +758,11 @@ mod tests {
         let json_value = serde_json::to_string(&hash).unwrap();
         println!("{}", json_value);
         assert_eq!(json_value, format!("\"{}\"", hash.to_string()));
+
         let de_hash = serde_json::from_slice::<HashValue>(json_value.as_bytes()).unwrap();
+        let de_hash2: HashValue = serde_json::from_str::<HashValue>(&json_value).unwrap();
         assert_eq!(hash, de_hash);
+        assert_eq!(hash, de_hash2);
     }
 
     #[test]
