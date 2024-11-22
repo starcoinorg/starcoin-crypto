@@ -291,7 +291,9 @@ impl HashValue {
     #[inline(always)]
     pub fn from_le_u64(arr: [u64; 4]) -> Self {
         let mut ret = [0; Self::LENGTH];
-        ret.chunks_exact_mut(8).zip(arr.iter()).for_each(|(bytes, word)| bytes.copy_from_slice(&word.to_le_bytes()));
+        ret.chunks_exact_mut(8)
+            .zip(arr.iter())
+            .for_each(|(bytes, word)| bytes.copy_from_slice(&word.to_le_bytes()));
         Self::new(ret)
     }
     #[inline(always)]
@@ -326,17 +328,13 @@ impl ser::Serialize for HashValue {
         S: ser::Serializer,
     {
         if serializer.is_human_readable() {
-            serializer.serialize_str(&self.to_hex())
+            serializer.serialize_str(&self.to_string())
         } else {
             // In order to preserve the Serde data model and help analysis tools,
             // make sure to wrap our value in a container with the same name
             // as the original type.
-            #[derive(Serialize)]
-            #[serde(rename = "HashValue")]
-            struct Value<'a> {
-                hash: &'a [u8; HashValue::LENGTH],
-            }
-            Value { hash: &self.hash }.serialize(serializer)
+            serializer
+                .serialize_newtype_struct("HashValue", serde_bytes::Bytes::new(&self.hash[..]))
         }
     }
 }
@@ -348,19 +346,16 @@ impl<'de> de::Deserialize<'de> for HashValue {
     {
         if deserializer.is_human_readable() {
             let encoded_hash = <String>::deserialize(deserializer)?;
-            HashValue::from_hex(encoded_hash.as_str())
+            HashValue::from_str(encoded_hash.as_str())
                 .map_err(<D::Error as ::serde::de::Error>::custom)
         } else {
             // See comment in serialize.
-            #[derive(Deserialize)]
+            #[derive(::serde::Deserialize)]
             #[serde(rename = "HashValue")]
-            struct Value {
-                hash: [u8; HashValue::LENGTH],
-            }
+            struct Value<'a>(&'a [u8]);
 
-            let value = Value::deserialize(deserializer)
-                .map_err(<D::Error as ::serde::de::Error>::custom)?;
-            Ok(Self::new(value.hash))
+            let value = Value::deserialize(deserializer)?;
+            Self::from_slice(value.0).map_err(<D::Error as ::serde::de::Error>::custom)
         }
     }
 }
@@ -779,5 +774,17 @@ mod tests {
         assert_eq!(json_value, format!("\"{}\"", hash.to_string()));
         let de_hash = serde_json::from_slice::<HashValue>(json_value.as_bytes()).unwrap();
         assert_eq!(hash, de_hash);
+    }
+
+    #[test]
+    fn test_serialize_and_deserialize() {
+        let hash = HashValue::zero();
+        let bytes = bcs::to_bytes(&hash).unwrap();
+        const BUF_SIZE:usize = 33;
+        let mut buf : [u8; BUF_SIZE] = [0; BUF_SIZE];
+        buf[0] = HashValue::LENGTH as u8;
+        assert_eq!(bytes.as_slice(), buf);
+        let hash1 = bcs::from_bytes::<HashValue>(&bytes).unwrap();
+        assert_eq!(hash1,hash);
     }
 }
