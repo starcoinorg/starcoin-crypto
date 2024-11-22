@@ -109,7 +109,7 @@ use openrpc_schema::schemars::JsonSchema;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use rand::{rngs::OsRng, Rng};
-use serde::{de, ser, Deserialize, Serialize};
+use serde::{de, ser};
 use std::{
     self,
     convert::{AsRef, TryFrom},
@@ -411,23 +411,15 @@ impl fmt::LowerHex for HashValue {
 
 impl fmt::Debug for HashValue {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "HashValue(")?;
-        <Self as fmt::LowerHex>::fmt(self, f)?;
-        write!(f, ")")?;
-        Ok(())
+        write!(f, "HashValue({:#x})", self)
     }
 }
 
-/// Will print shortened (4 bytes) hash
 impl fmt::Display for HashValue {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for byte in self.hash.iter().take(4) {
-            write!(f, "{:02x}", byte)?;
-        }
-        Ok(())
+        write!(f, "{:#x}", self)
     }
 }
-
 impl From<HashValue> for Bytes {
     fn from(value: HashValue) -> Bytes {
         Bytes::copy_from_slice(value.hash.as_ref())
@@ -438,7 +430,7 @@ impl FromStr for HashValue {
     type Err = HashValueParseError;
 
     fn from_str(s: &str) -> Result<Self, HashValueParseError> {
-        HashValue::from_hex(s)
+        HashValue::from_hex_literal(s)
     }
 }
 
@@ -754,12 +746,6 @@ impl From<u64> for HashValue {
         Self::from_u64_word(word)
     }
 }
-impl AsRef<[u8]> for HashValue {
-    #[inline(always)]
-    fn as_ref(&self) -> &[u8] {
-        &self.hash
-    }
-}
 
 #[cfg(test)]
 mod tests {
@@ -772,19 +758,22 @@ mod tests {
         let json_value = serde_json::to_string(&hash).unwrap();
         println!("{}", json_value);
         assert_eq!(json_value, format!("\"{}\"", hash.to_string()));
+
         let de_hash = serde_json::from_slice::<HashValue>(json_value.as_bytes()).unwrap();
+        let de_hash2: HashValue = serde_json::from_str::<HashValue>(&json_value).unwrap();
         assert_eq!(hash, de_hash);
+        assert_eq!(hash, de_hash2);
     }
 
     #[test]
     fn test_serialize_and_deserialize() {
         let hash = HashValue::zero();
         let bytes = bcs::to_bytes(&hash).unwrap();
-        const BUF_SIZE:usize = 33;
-        let mut buf : [u8; BUF_SIZE] = [0; BUF_SIZE];
+        const BUF_SIZE: usize = 33;
+        let mut buf: [u8; BUF_SIZE] = [0; BUF_SIZE];
         buf[0] = HashValue::LENGTH as u8;
         assert_eq!(bytes.as_slice(), buf);
         let hash1 = bcs::from_bytes::<HashValue>(&bytes).unwrap();
-        assert_eq!(hash1,hash);
+        assert_eq!(hash1, hash);
     }
 }
