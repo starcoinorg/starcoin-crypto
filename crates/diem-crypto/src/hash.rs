@@ -108,7 +108,7 @@ use once_cell::sync::{Lazy, OnceCell};
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use rand::{rngs::OsRng, Rng};
-use serde::{de, ser};
+use serde::{de, Deserialize, ser, Serialize};
 use std::{
     self,
     convert::{AsRef, TryFrom},
@@ -819,8 +819,16 @@ impl AsRef<[u8]> for HashValue {
         &self.hash
     }
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct TestStruct {
+    value: u64,
+    hash: HashValue,
+}
+
 #[cfg(test)]
 mod tests {
+    use serde::{Deserialize, Serialize};
     use crate::HashValue;
 
     #[test]
@@ -832,5 +840,9 @@ mod tests {
         assert_eq!(json_value, format!("\"{}\"", hash.to_string()));
         let de_hash = serde_json::from_slice::<HashValue>(json_value.as_bytes()).unwrap();
         assert_eq!(hash, de_hash);
+
+
+       let bytes1 = bcs::to_bytes(&hash).unwrap();
+        println!("{:?}", bytes1);
     }
 }
