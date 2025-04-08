@@ -320,6 +320,11 @@ impl HashValue {
             Self::from_hex(&literal)
         }
     }
+
+    /// get inner u8 array
+    pub fn to_inner(&self) -> [u8; Self::LENGTH] {
+        self.hash.clone()
+    }
 }
 
 impl ser::Serialize for HashValue {
