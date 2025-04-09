@@ -11,10 +11,15 @@ edition = "2018"
 
 [dependencies]
 anyhow = "1.0.52"
-bytes = "1.0.1"
-curve25519-dalek = { version = "0.1.0", package = "curve25519-dalek-fiat", default-features = false, features = ["std"] }
+bytes = "1.6.1"
+curve25519-dalek = { version = "0.1.0", package = "curve25519-dalek-fiat", default-features = false, features = [
+    "std",
+] }
 digest = "0.9.0"
-ed25519-dalek = { version = "0.1.0", package = "ed25519-dalek-fiat", default-features = false, features = ["std", "serde"] }
+ed25519-dalek = { version = "0.1.0", package = "ed25519-dalek-fiat", default-features = false, features = [
+    "std",
+    "serde",
+] }
 hex = "0.4.3"
 hkdf = "0.10.0"
 once_cell = "1.7.2"
@@ -30,12 +35,14 @@ sha2 = "0.9.3"
 static_assertions = "1.1.0"
 thiserror = "1.0.24"
 tiny-keccak = { version = "2.0.2", features = ["sha3"] }
-x25519-dalek = { version = "0.1.0", package = "x25519-dalek-fiat", default-features = false, features = ["std"] }
+x25519-dalek = { version = "0.1.0", package = "x25519-dalek-fiat", default-features = false, features = [
+    "std",
+] }
 aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
 libc = "^0.2"
-openrpc-schema = {git = "https://github.com/starcoinorg/openrpc-rs",rev = "f8ab047e30927cdf2f605b61a219c975d6c4f666"}
+openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "1f2f7d3495e3bd3ef3b6fcf7c4e0602cad090d5e" }
 
 [dev-dependencies]
 bitvec = "0.19.4"
@@ -53,9 +60,21 @@ default = ["fiat"]
 assert-private-keys-not-cloneable = []
 cloneable-private-keys = []
 fuzzing = ["proptest", "proptest-derive", "cloneable-private-keys"]
-fiat = ["curve25519-dalek/fiat_u64_backend", "ed25519-dalek/fiat_u64_backend", "x25519-dalek/fiat_u64_backend"]
-u64 = ["curve25519-dalek/u64_backend", "ed25519-dalek/u64_backend", "x25519-dalek/u64_backend"]
-u32 = ["curve25519-dalek/u32_backend", "ed25519-dalek/u32_backend", "x25519-dalek/u32_backend"]
+fiat = [
+    "curve25519-dalek/fiat_u64_backend",
+    "ed25519-dalek/fiat_u64_backend",
+    "x25519-dalek/fiat_u64_backend",
+]
+u64 = [
+    "curve25519-dalek/u64_backend",
+    "ed25519-dalek/u64_backend",
+    "x25519-dalek/u64_backend",
+]
+u32 = [
+    "curve25519-dalek/u32_backend",
+    "ed25519-dalek/u32_backend",
+    "x25519-dalek/u32_backend",
+]
 #cargo build --release --features=avx512f
 avx512f = []
 
@@ -69,7 +88,7 @@ harness = false
 
 [build-dependencies]
 cc = "1.0"
-bindgen="0.59.2"
+bindgen = "0.59.2"
 
 [lib]
 name = "avx512_sha3"
