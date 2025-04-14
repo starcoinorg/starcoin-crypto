@@ -99,8 +99,6 @@
 //! let hash_value = hasher.finish();
 //! ```
 #![allow(clippy::integer_arithmetic)]
-#[cfg(feature = "avx512f")]
-use crate::Avx512Sha3;
 use bytes::Bytes;
 use hex::FromHex;
 use mirai_annotations::*;
@@ -118,7 +116,6 @@ use std::{
 use openrpc_schema::schemars::gen::SchemaGenerator;
 use openrpc_schema::schemars::JsonSchema;
 use openrpc_schema::schemars::schema::{InstanceType, Schema, SchemaObject};
-#[cfg(not(feature = "avx512f"))]
 use tiny_keccak::{Hasher, Sha3};
 
 /// A prefix used to begin the salt of every diem hashable structure. The salt
@@ -182,20 +179,6 @@ impl HashValue {
     ///
     /// Note this will not result in the `<T as CryptoHash>::hash()` for any
     /// reasonable struct T, as this computes a sha3 without any ornaments.
-    #[cfg(feature = "avx512f")]
-    pub fn sha3_256_of(buffer: &[u8]) -> Self {
-        let mut sha3 = Avx512Sha3::new();
-        sha3.update(buffer);
-        sha3.finalize()
-    }
-
-    /// Convenience function that computes a `HashValue` internally equal to
-    /// the sha3_256 of a byte buffer. It will handle hasher creation, data
-    /// feeding and finalization.
-    ///
-    /// Note this will not result in the `<T as CryptoHash>::hash()` for any
-    /// reasonable struct T, as this computes a sha3 without any ornaments.
-    #[cfg(not(feature = "avx512f"))]
     pub fn sha3_256_of(buffer: &[u8]) -> Self {
         let mut sha3 = Sha3::v256();
         sha3.update(buffer);
@@ -203,20 +186,6 @@ impl HashValue {
     }
 
     #[cfg(test)]
-    #[cfg(feature = "avx512f")]
-    pub fn from_iter_sha3<'a, I>(buffers: I) -> Self
-    where
-        I: IntoIterator<Item = &'a [u8]>,
-    {
-        let mut sha3 = Avx512Sha3::new();
-        for buffer in buffers {
-            sha3.update(buffer);
-        }
-        sha3.finalize()
-    }
-
-    #[cfg(test)]
-    #[cfg(not(feature = "avx512f"))]
     pub fn from_iter_sha3<'a, I>(buffers: I) -> Self
     where
         I: IntoIterator<Item = &'a [u8]>,
@@ -233,7 +202,6 @@ impl HashValue {
         &mut self.hash[..]
     }
 
-    #[cfg(not(feature = "avx512f"))]
     fn from_keccak(state: Sha3) -> Self {
         let mut hash = Self::zero();
         state.finalize(hash.as_ref_mut());
@@ -543,14 +511,6 @@ pub trait CryptoHasher: Default + std::io::Write {
 
 /// The default hasher underlying generated implementations of `CryptoHasher`.
 #[doc(hidden)]
-#[cfg(feature = "avx512f")]
-#[derive(Clone)]
-pub struct DefaultHasher {
-    state: Avx512Sha3,
-}
-
-#[doc(hidden)]
-#[cfg(not(feature = "avx512f"))]
 #[derive(Clone)]
 pub struct DefaultHasher {
     state: Sha3,
@@ -571,17 +531,6 @@ impl DefaultHasher {
     }
 
     #[doc(hidden)]
-    #[cfg(feature = "avx512f")]
-    pub fn new(typename: &[u8]) -> Self {
-        let mut state = Avx512Sha3::new();
-        if !typename.is_empty() {
-            state.update(&Self::prefixed_hash(typename));
-        }
-        DefaultHasher { state }
-    }
-
-    #[doc(hidden)]
-    #[cfg(not(feature = "avx512f"))]
     pub fn new(typename: &[u8]) -> Self {
         let mut state = Sha3::v256();
         if !typename.is_empty() {
@@ -596,31 +545,16 @@ impl DefaultHasher {
     }
 
     #[doc(hidden)]
-    #[cfg(not(feature = "avx512f"))]
     pub fn finish(self) -> HashValue {
         let mut hasher = HashValue::default();
         self.state.finalize(hasher.as_ref_mut());
         hasher
     }
-
-    #[doc(hidden)]
-    #[cfg(feature = "avx512f")]
-    pub fn finish(&mut self) -> HashValue {
-        self.state.finalize()
-    }
 }
 
-#[cfg(not(feature = "avx512f"))]
 impl fmt::Debug for DefaultHasher {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "DefaultHasher: state = Sha3")
-    }
-}
-
-#[cfg(feature = "avx512f")]
-impl fmt::Debug for DefaultHasher {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "DefaultHasher: input = avx512_sha3")
     }
 }
 
@@ -660,12 +594,6 @@ macro_rules! define_hasher {
                 self.0.update(bytes);
             }
 
-            #[cfg(feature = "avx512f")]
-            fn finish(mut self) -> HashValue {
-                self.0.finish()
-            }
-
-              #[cfg(not(feature = "avx512f"))]
             fn finish(self) -> HashValue {
                 self.0.finish()
             }
