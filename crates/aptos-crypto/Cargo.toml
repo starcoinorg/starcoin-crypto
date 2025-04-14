@@ -25,6 +25,7 @@ bcs = { workspace = true }
 blst = { workspace = true }
 bulletproofs = { workspace = true }
 bytes = { workspace = true }
+crypto-common = { workspace = true }
 curve25519-dalek = { workspace = true }
 curve25519-dalek-ng = { workspace = true }
 digest = { workspace = true }
