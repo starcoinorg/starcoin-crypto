@@ -23,4 +23,3 @@ serde-name = "0.2"
 [features]
 default = []
 fuzzing = ["diem-crypto/fuzzing"]
-avx512f = ["diem-crypto/avx512f"]
