@@ -9,7 +9,6 @@ homepage = "https://aptoslabs.com"
 license = "Apache-2.0"
 publish = false
 repository = "https://github.com/aptos-labs/aptos-core"
-rust-version = "1.75.0"
 
 [dependencies]
 aes-gcm = { workspace = true }
@@ -25,7 +24,7 @@ bcs = { workspace = true }
 blst = { workspace = true }
 bulletproofs = { workspace = true }
 bytes = { workspace = true }
-crypto-common = { workspace = true }
+crypto-common = { workspace = true, features = ["fuzzing"] }
 curve25519-dalek = { workspace = true }
 curve25519-dalek-ng = { workspace = true }
 digest = { workspace = true }
@@ -81,7 +80,7 @@ trybuild = { workspace = true }
 default = []
 assert-private-keys-not-cloneable = []
 cloneable-private-keys = []
-fuzzing = ["proptest", "proptest-derive", "cloneable-private-keys"]
+fuzzing = ["proptest", "proptest-derive", "cloneable-private-keys", "crypto-common/fuzzing"]
 testing = []
 
 [[bench]]
