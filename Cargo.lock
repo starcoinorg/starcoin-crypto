@@ -346,7 +346,7 @@ checksum = "7a81dae078cea95a014a339291cec439d2f232ebe854a9d672b796c6afafa9b7"
 [[package]]
 name = "crypto-common"
 version = "0.1.0"
-source = "git+https://github.com/starcoinorg/crypto-common?rev=752ab41c7e0248cc57b80b86bdd44e59bf1cee1f#752ab41c7e0248cc57b80b86bdd44e59bf1cee1f"
+source = "git+https://github.com/starcoinorg/crypto-common?rev=c350ab8d2b61f24d4a6102e5797a29b3950b92b2#c350ab8d2b61f24d4a6102e5797a29b3950b92b2"
 dependencies = [
  "bcs 0.1.4",
  "byteorder",
