@@ -30,6 +30,7 @@ bytes = { version = "1.4.0", features = ["serde"] }
 byteorder = "1.4.3"
 bitvec = "1.0.1"
 criterion = "0.3.5"
+crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "752ab41c7e0248cc57b80b86bdd44e59bf1cee1f"}
 curve25519-dalek = "3"
 curve25519-dalek-ng = "4"
 digest = "0.9.0"
