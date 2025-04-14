@@ -42,7 +42,7 @@ aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
 openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "1f2f7d3495e3bd3ef3b6fcf7c4e0602cad090d5e" }
-crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "752ab41c7e0248cc57b80b86bdd44e59bf1cee1f"}
+crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "c350ab8d2b61f24d4a6102e5797a29b3950b92b2", default-features = false, features = ["fuzzing"] }
 
 [dev-dependencies]
 bitvec = "0.19.4"
@@ -59,7 +59,7 @@ trybuild = "1.0.41"
 default = ["fiat"]
 assert-private-keys-not-cloneable = []
 cloneable-private-keys = []
-fuzzing = ["proptest", "proptest-derive", "cloneable-private-keys"]
+fuzzing = ["proptest", "proptest-derive", "cloneable-private-keys", "crypto-common/fuzzing"]
 fiat = [
     "curve25519-dalek/fiat_u64_backend",
     "ed25519-dalek/fiat_u64_backend",
