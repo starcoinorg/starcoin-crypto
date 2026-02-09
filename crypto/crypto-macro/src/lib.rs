@@ -17,9 +17,9 @@ use syn::{parse_macro_input, DeriveInput, Ident};
 pub fn crypto_hash(input: TokenStream) -> TokenStream {
     let item = parse_macro_input!(input as DeriveInput);
     let name = &item.ident;
-    let hasher_name = Ident::new(&format!("{}Hasher", name.to_string()), Span::call_site());
+    let hasher_name = Ident::new(&format!("{}Hasher", name), Span::call_site());
     let error_msg = syn::LitStr::new(
-        &format!("Serialization of {} should not fail", name.to_string()),
+        &format!("Serialization of {} should not fail", name),
         Span::call_site(),
     );
 
