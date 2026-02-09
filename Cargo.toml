@@ -34,10 +34,11 @@ crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "c
 curve25519-dalek = "3"
 curve25519-dalek-ng = "4"
 digest = "0.9.0"
+digest_0_10 = { package = "digest", version = "0.10.7" }
 ed25519-dalek = { version = "1.0.1", features = ["std", "serde"] }
 ff = { version = "0.13", features = ["derive"] }
 hex = { version = "0.4.3", features = ["serde"] }
-hkdf = "0.10.0"
+hkdf = "0.12.3"
 libsecp256k1 = "0.7.0"
 merlin = "3"
 more-asserts = "0.3.0"

@@ -76,11 +76,12 @@
 //! assert_eq!(derived_bytes.unwrap().len(), 64)
 //! ```
 
-use digest::{
-    generic_array::{self, ArrayLength},
-    BlockInput, FixedOutput, Reset, Update,
+use digest_0_10::{
+    core_api::BlockSizeUser,
+    generic_array::ArrayLength,
+    typenum::{IsGreaterOrEqual, True, U32},
+    Digest,
 };
-use generic_array::typenum::{IsGreaterOrEqual, True, U32};
 use std::marker::PhantomData;
 use thiserror::Error;
 
@@ -98,8 +99,7 @@ const MINIMUM_SEED_LENGTH: usize = 16;
 #[derive(Clone, Debug)]
 pub struct Hkdf<D>
 where
-    D: Update + BlockInput + FixedOutput + Reset + Default + Clone,
-    D::BlockSize: ArrayLength<u8>,
+    D: Digest + BlockSizeUser + Clone,
     D::OutputSize: ArrayLength<u8>,
     D::OutputSize: IsGreaterOrEqual<DMinimumSize, Output = True>,
 {
@@ -108,8 +108,7 @@ where
 
 impl<D> Hkdf<D>
 where
-    D: Update + BlockInput + FixedOutput + Reset + Default + Clone,
-    D::BlockSize: ArrayLength<u8> + Clone,
+    D: Digest + BlockSizeUser + Clone,
     D::OutputSize: ArrayLength<u8>,
     D::OutputSize: IsGreaterOrEqual<DMinimumSize, Output = True>,
 {
@@ -122,7 +121,7 @@ where
     }
 
     fn extract_no_ikm_check(salt: Option<&[u8]>, ikm: &[u8]) -> Vec<u8> {
-        let (arr, _hkdf) = hkdf::Hkdf::<D>::extract(salt, ikm);
+        let (arr, _hkdf) = hkdf::SimpleHkdf::<D>::extract(salt, ikm);
         arr.to_vec()
     }
 
@@ -135,8 +134,8 @@ where
             return Err(HkdfError::InvalidOutputLengthError);
         }
 
-        let hkdf =
-            hkdf::Hkdf::<D>::from_prk(prk).map_err(|_| HkdfError::WrongPseudorandomKeyError)?;
+        let hkdf = hkdf::SimpleHkdf::<D>::from_prk(prk)
+            .map_err(|_| HkdfError::WrongPseudorandomKeyError)?;
         let mut okm = vec![0u8; length];
         hkdf.expand(info.unwrap_or(&[]), &mut okm)
             // length > D::OutputSize::to_usize() * 255

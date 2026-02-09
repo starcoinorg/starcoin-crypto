@@ -3,6 +3,7 @@
 
 use serde::{Deserialize, Serialize};
 use starcoin_crypto::hash::{CryptoHash, CryptoHasher, PlainCryptoHash};
+use bcs as bcs_ext;
 
 #[derive(Debug, Hash, Serialize, Deserialize, CryptoHasher, CryptoHash)]
 struct TestStruct {
@@ -38,8 +39,8 @@ fn test_crypto_hash() {
     };
 
     assert_eq!(
-        bcs_ext::to_bytes(&o).unwrap(),
-        bcs_ext::to_bytes(&o3).unwrap()
+        bcs::to_bytes(&o).unwrap(),
+        bcs::to_bytes(&o3).unwrap()
     );
     let hash3 = o3.crypto_hash();
     assert_ne!(hash1, hash3);

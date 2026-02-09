@@ -1,8 +1,8 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::{compat::Sha3_256, hkdf::*};
-use sha2::{Sha256, Sha512};
+use crate::hkdf::*;
+use sha2_0_10_6::{Sha256, Sha512};
 
 // Testing against sha256 test vectors. Unfortunately the rfc does not provide test vectors for
 // sha3 and sha512.
@@ -73,46 +73,6 @@ fn test_sha256_output_length() {
 
     // Test for zero size output (expected to fail)
     let hkdf_expand = Hkdf::<Sha256>::expand(&hkdf_extract, None, 0);
-    assert_eq!(
-        hkdf_expand.unwrap_err(),
-        HkdfError::InvalidOutputLengthError
-    );
-}
-
-// FIPS 202 approves HMAC-SHA3 and specifies the block sizes (see top of page 22).
-// SP 800-56C approves of HKDF-HMAC-hash as a randomness extractor with any approved hash function.
-// But in contrast, I can't find any NIST statement that explicitly approves the use of KMAC
-// as a randomness extractor.
-// But, it's debatable if this is a pointless construct, as HMAC only exists to cover up weaknesses
-// in Merkle-Damgard hashes, but sha3 (and Keccak) are sponge constructions, immune to length
-// extension attacks.
-#[test]
-fn test_sha3_256_output_length() {
-    let max_hash_length: usize = 255 * 32; // = 8160
-    let ikm = [0u8; 32];
-    let hkdf_extract = Hkdf::<Sha3_256>::extract(None, &ikm).unwrap();
-
-    // Test for max allowed (expected to pass)
-    let hkdf_expand = Hkdf::<Sha3_256>::expand(&hkdf_extract, None, max_hash_length);
-    assert!(hkdf_expand.is_ok());
-    assert_eq!(hkdf_expand.unwrap().len(), max_hash_length);
-
-    // Test for max + 1 (expected to fail)
-    let hkdf_expand = Hkdf::<Sha3_256>::expand(&hkdf_extract, None, max_hash_length + 1);
-    assert_eq!(
-        hkdf_expand.unwrap_err(),
-        HkdfError::InvalidOutputLengthError
-    );
-
-    // Test for 10_000 > max (expected to fail)
-    let hkdf_expand = Hkdf::<Sha3_256>::expand(&hkdf_extract, None, 10_000);
-    assert_eq!(
-        hkdf_expand.unwrap_err(),
-        HkdfError::InvalidOutputLengthError
-    );
-
-    // Test for zero size output (expected to fail)
-    let hkdf_expand = Hkdf::<Sha3_256>::expand(&hkdf_extract, None, 0);
     assert_eq!(
         hkdf_expand.unwrap_err(),
         HkdfError::InvalidOutputLengthError

@@ -28,6 +28,7 @@ crypto-common = { workspace = true, features = ["fuzzing"] }
 curve25519-dalek = { workspace = true }
 curve25519-dalek-ng = { workspace = true }
 digest = { workspace = true }
+digest_0_10 = { workspace = true }
 ed25519-dalek = { workspace = true }
 ff = { workspace = true }
 hex = { workspace = true }
