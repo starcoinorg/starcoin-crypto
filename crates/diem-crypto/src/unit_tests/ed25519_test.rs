@@ -16,7 +16,7 @@ use core::{
     convert::TryFrom,
     ops::{Add, Index, IndexMut, Mul, Neg},
 };
-use ed25519_dalek::ed25519::signature::{Signature as _, Verifier as _};
+use ed25519_dalek::ed25519::signature::Verifier as _;
 
 use diem_crypto_derive::{BCSCryptoHash, CryptoHasher};
 use digest::Digest;
@@ -99,9 +99,9 @@ proptest! {
         // Compute k = H(R∥A∥m) //
         //////////////////////////
         let mut h: Sha512 = Sha512::default();
-        h.update(&mixed_r_point.compress().to_bytes());
-        h.update(&mixed_pub_point.compress().to_bytes());
-        h.update(&message);
+        h.update(mixed_r_point.compress().to_bytes());
+        h.update(mixed_pub_point.compress().to_bytes());
+        h.update(message);
         // curve25519_dalek is stuck on an old digest version, so we can't do
         // Scalar::from_hash
         let mut output = [0u8; 64];
@@ -119,7 +119,7 @@ proptest! {
         let nonce = &expanded_priv_key[32..];
         let mut h: Sha512 = Sha512::default();
         h.update(nonce);
-        h.update(&message);
+        h.update(message);
         // curve25519_dalek is stuck on an old digest version, so we can't do
         // Scalar::from_hash
         let mut output = [0u8; 64];

@@ -6,8 +6,8 @@
 
 use digest::{
     consts::{U136, U32},
-    generic_array::GenericArray,
-    BlockInput, Digest, FixedOutput, Reset, Update,
+    core_api::BlockSizeUser,
+    Digest, FixedOutput, FixedOutputReset, HashMarker, Output, OutputSizeUser, Reset, Update,
 };
 use tiny_keccak::{Hasher, Sha3};
 
@@ -28,14 +28,20 @@ impl Default for Sha3_256 {
     }
 }
 
-impl BlockInput for Sha3_256 {
+impl BlockSizeUser for Sha3_256 {
     type BlockSize = U136;
 }
 
+impl OutputSizeUser for Sha3_256 {
+    type OutputSize = U32;
+}
+
+impl HashMarker for Sha3_256 {}
+
 impl Update for Sha3_256 {
     #[inline]
-    fn update(&mut self, data: impl AsRef<[u8]>) {
-        self.0.update(data.as_ref());
+    fn update(&mut self, data: &[u8]) {
+        self.0.update(data);
     }
 }
 
@@ -47,16 +53,16 @@ impl Reset for Sha3_256 {
 }
 
 impl FixedOutput for Sha3_256 {
-    type OutputSize = U32;
-
     #[inline]
-    fn finalize_into(self, out: &mut GenericArray<u8, Self::OutputSize>) {
+    fn finalize_into(self, out: &mut Output<Self>) {
         self.0.finalize(out.as_mut());
     }
+}
 
+impl FixedOutputReset for Sha3_256 {
     #[inline]
-    fn finalize_into_reset(&mut self, out: &mut GenericArray<u8, Self::OutputSize>) {
-        self.clone().finalize_into(out);
+    fn finalize_into_reset(&mut self, out: &mut Output<Self>) {
+        FixedOutput::finalize_into(self.clone(), out);
         Reset::reset(self)
     }
 }

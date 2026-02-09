@@ -95,8 +95,6 @@
 //! }
 //! ```
 
-#![forbid(unsafe_code)]
-
 extern crate proc_macro;
 
 mod hasher;
@@ -324,10 +322,7 @@ pub fn derive_enum_signature(input: TokenStream) -> TokenStream {
 #[proc_macro_derive(CryptoHasher)]
 pub fn hasher_dispatch(input: TokenStream) -> TokenStream {
     let item = parse_macro_input!(input as DeriveInput);
-    let hasher_name = Ident::new(
-        &format!("{}Hasher", &item.ident.to_string()),
-        Span::call_site(),
-    );
+    let hasher_name = Ident::new(&format!("{}Hasher", item.ident), Span::call_site());
     let snake_name = camel_to_snake(&item.ident.to_string());
     let static_seed_name = Ident::new(
         &format!("{}_SEED", snake_name.to_uppercase()),
@@ -413,9 +408,9 @@ pub fn hasher_dispatch(input: TokenStream) -> TokenStream {
 pub fn bcs_crypto_hash_dispatch(input: TokenStream) -> TokenStream {
     let ast = parse_macro_input!(input as DeriveInput);
     let name = &ast.ident;
-    let hasher_name = Ident::new(&format!("{}Hasher", &name.to_string()), Span::call_site());
+    let hasher_name = Ident::new(&format!("{name}Hasher"), Span::call_site());
     let error_msg = syn::LitStr::new(
-        &format!("BCS serialization of {} should not fail", name.to_string()),
+        &format!("BCS serialization of {name} should not fail"),
         Span::call_site(),
     );
     let generics = add_trait_bounds(ast.generics);

@@ -76,7 +76,7 @@ pub trait ValidCryptoMaterialStringExt: ValidCryptoMaterial {
     fn from_encoded_string(encoded_str: &str) -> std::result::Result<Self, CryptoMaterialError> {
         let encoded_str = encoded_str
             .strip_prefix("0x")
-            .unwrap_or_else(|| encoded_str);
+            .unwrap_or(encoded_str);
         let bytes_out = ::hex::decode(encoded_str);
         // We defer to `try_from` to make sure we only produce valid crypto materials.
         bytes_out
@@ -86,7 +86,7 @@ pub trait ValidCryptoMaterialStringExt: ValidCryptoMaterial {
     }
     /// A function to encode into hex-string after serializing.
     fn to_encoded_string(&self) -> Result<String> {
-        Ok(format!("0x{}", ::hex::encode(&self.to_bytes())))
+        Ok(format!("0x{}", ::hex::encode(self.to_bytes())))
     }
 }
 

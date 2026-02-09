@@ -4,18 +4,32 @@
 use crate::hash::*;
 use bitvec::prelude::*;
 use proptest::{collection::vec, prelude::*};
-use rand::{rngs::StdRng, SeedableRng};
+use rand07::{rngs::StdRng, SeedableRng};
 use serde::Serialize;
 use std::str::FromStr;
+use tiny_keccak::{Hasher, Sha3};
 
 #[derive(Serialize)]
 struct Foo(u32);
+
+fn hash_from_iter_sha3<'a, I>(buffers: I) -> HashValue
+where
+    I: IntoIterator<Item = &'a [u8]>,
+{
+    let mut sha3 = Sha3::v256();
+    for buffer in buffers {
+        sha3.update(buffer);
+    }
+    let mut hash = [0u8; HashValue::LENGTH];
+    sha3.finalize(&mut hash);
+    HashValue::new(hash)
+}
 
 #[test]
 fn test_default_hasher() {
     assert_eq!(
         Foo(3).test_only_hash(),
-        HashValue::from_iter_sha3(vec![bcs::to_bytes(&Foo(3)).unwrap().as_slice()]),
+        hash_from_iter_sha3(vec![bcs::to_bytes(&Foo(3)).unwrap().as_slice()]),
     );
     assert_eq!(
         format!("{:x}", b"hello".test_only_hash()),
@@ -60,7 +74,7 @@ fn test_from_slice() {
         assert!(HashValue::from_slice(&zero_byte_vec).is_err());
     }
     {
-        let bytes = vec![1; 123];
+        let bytes = [1; 123];
         assert!(HashValue::from_slice(&bytes[..]).is_err());
     }
 }
@@ -88,22 +102,22 @@ fn test_hash_value_iter_bits() {
     let bits = hash.iter_bits().collect::<Vec<_>>();
 
     assert_eq!(bits.len(), HashValue::LENGTH_IN_BITS);
-    assert_eq!(bits[0], false);
-    assert_eq!(bits[1], false);
-    assert_eq!(bits[2], true);
-    assert_eq!(bits[3], true);
-    assert_eq!(bits[4], false);
-    assert_eq!(bits[5], false);
-    assert_eq!(bits[6], true);
-    assert_eq!(bits[7], true);
-    assert_eq!(bits[248], true);
-    assert_eq!(bits[249], false);
-    assert_eq!(bits[250], false);
-    assert_eq!(bits[251], true);
-    assert_eq!(bits[252], false);
-    assert_eq!(bits[253], false);
-    assert_eq!(bits[254], true);
-    assert_eq!(bits[255], false);
+    assert!(!bits[0]);
+    assert!(!bits[1]);
+    assert!(bits[2]);
+    assert!(bits[3]);
+    assert!(!bits[4]);
+    assert!(!bits[5]);
+    assert!(bits[6]);
+    assert!(bits[7]);
+    assert!(bits[248]);
+    assert!(!bits[249]);
+    assert!(!bits[250]);
+    assert!(bits[251]);
+    assert!(!bits[252]);
+    assert!(!bits[253]);
+    assert!(bits[254]);
+    assert!(!bits[255]);
 
     let mut bits_rev = hash.iter_bits().rev().collect::<Vec<_>>();
     bits_rev.reverse();
