@@ -11,15 +11,22 @@ serde = { workspace = true }
 serde_bytes = { workspace = true }
 hex = { workspace = true }
 anyhow = { workspace = true }
-aptos-crypto = { workspace = true, features = ["fuzzing"] }
-aptos-crypto-derive = { workspace = true }
+aptos-crypto = { workspace = true, features = ["cloneable-private-keys"], optional = true }
+aptos-crypto-derive = { workspace = true, optional = true }
+diem-crypto = { package = "diem-crypto", path = "../crates/diem-crypto", features = ["cloneable-private-keys"], optional = true }
+diem-crypto-derive = { package = "diem-crypto-derive", path = "../crates/diem-crypto-derive", optional = true }
 bcs = { workspace = true }
-rand = { workspace = true }
+rand = { workspace = true, optional = true }
+rand08 = { package = "rand", version = "0.8.5", optional = true }
 rand_core = { workspace = true }
 once_cell = { workspace = true }
 serde-name = { workspace = true }
 starcoin-crypto-macro = { workspace = true }
 
 [features]
-default = []
-fuzzing = ["aptos-crypto/fuzzing"]
+default = ["compiler-v2"]
+compiler-v1 = ["backend-diem"]
+compiler-v2 = ["backend-aptos"]
+backend-aptos = ["dep:aptos-crypto", "dep:aptos-crypto-derive", "dep:rand"]
+backend-diem = ["dep:diem-crypto", "dep:diem-crypto-derive", "dep:rand08"]
+fuzzing = ["aptos-crypto?/fuzzing", "diem-crypto?/fuzzing"]

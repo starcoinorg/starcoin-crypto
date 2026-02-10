@@ -1,9 +1,9 @@
 use super::*;
+use crate::backend_rand::prelude::*;
 use crate::multi_ed25519::multi_shard::MultiEd25519SignatureShard;
-use crate::test_utils::{TestAptosCrypto, TEST_SEED};
+use crate::test_utils::{TestCrypto, TEST_SEED};
 use crate::{Signature, ValidCryptoMaterial, ValidCryptoMaterialStringExt};
 use once_cell::sync::Lazy;
-use rand::prelude::*;
 use std::convert::TryFrom;
 
 fn generate_shards(n: usize, threshold: u8) -> Vec<MultiEd25519KeyShard> {
@@ -11,14 +11,14 @@ fn generate_shards(n: usize, threshold: u8) -> Vec<MultiEd25519KeyShard> {
     MultiEd25519KeyShard::generate(&mut rng, n, threshold).unwrap()
 }
 
-static MESSAGE: Lazy<TestAptosCrypto> = Lazy::new(|| TestAptosCrypto("Test Message".to_string()));
-fn message() -> &'static TestAptosCrypto {
+static MESSAGE: Lazy<TestCrypto> = Lazy::new(|| TestCrypto("Test Message".to_string()));
+fn message() -> &'static TestCrypto {
     &MESSAGE
 }
 
 #[test]
 pub fn test_to_string_by_read_seed() {
-    let mut seed_rng = rand::rngs::OsRng;
+    let mut seed_rng = crate::backend_rand::rngs::OsRng;
     let seed_buf: [u8; 32] = seed_rng.gen();
     let mut rng = StdRng::from_seed(seed_buf);
     let shards = MultiEd25519KeyShard::generate(&mut rng, 3, 2).unwrap();

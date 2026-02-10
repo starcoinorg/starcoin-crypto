@@ -1,14 +1,15 @@
 // Copyright (c) The Diem Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::{
-    bls12381,
-    ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
-    PrivateKey, Uniform,
-};
-use rand::{
+use crate::backend_rand::{
     rngs::{OsRng, StdRng},
     Rng, SeedableRng,
+};
+#[cfg(feature = "compiler-v2")]
+use crate::crypto_backend::bls12381;
+use crate::crypto_backend::{
+    ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
+    PrivateKey, Uniform,
 };
 
 /// Ed25519 key generator.
@@ -41,6 +42,7 @@ impl KeyGen {
     }
 
     /// Generate a bls12381 private key.
+    #[cfg(feature = "compiler-v2")]
     pub fn generate_bls12381_private_key(&mut self) -> bls12381::PrivateKey {
         bls12381::PrivateKey::generate(&mut self.0)
     }
