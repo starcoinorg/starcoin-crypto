@@ -1,15 +1,15 @@
 // Copyright (c) The Starcoin Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
+use crate::crypto_backend::ed25519::{
+    Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH,
+    ED25519_PUBLIC_KEY_LENGTH,
+};
+use crate::crypto_backend::multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature};
 use crate::hash::{CryptoHash, CryptoHasher};
 use crate::{CryptoMaterialError, Length, PrivateKey, Signature, ValidCryptoMaterial};
 use crate::{SigningKey, Uniform};
 use anyhow::{anyhow, bail, ensure, Result};
-use aptos_crypto::ed25519::{
-    Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH,
-    ED25519_PUBLIC_KEY_LENGTH,
-};
-use aptos_crypto::multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::convert::TryFrom;
@@ -17,6 +17,22 @@ use std::fmt;
 
 const MAX_NUM_OF_KEYS: usize = 32;
 const BITMAP_NUM_OF_BYTES: usize = 4;
+
+#[cfg(feature = "compiler-v2")]
+fn sign_message<T: CryptoHash + Serialize>(
+    private_key: &Ed25519PrivateKey,
+    message: &T,
+) -> Ed25519Signature {
+    private_key.sign(message).expect("sign message failed")
+}
+
+#[cfg(all(feature = "compiler-v1", not(feature = "compiler-v2")))]
+fn sign_message<T: CryptoHash + Serialize>(
+    private_key: &Ed25519PrivateKey,
+    message: &T,
+) -> Ed25519Signature {
+    private_key.sign(message)
+}
 
 /// Part of private keys in the multi-key Ed25519 structure along with the threshold.
 /// note: the private keys must be a sequential part of the MultiEd25519PrivateKey
@@ -78,7 +94,7 @@ impl MultiEd25519KeyShard {
     /// Generate `shards` MultiEd25519SignatureShard for test
     pub fn generate<R>(rng: &mut R, shards: usize, threshold: u8) -> Result<Vec<Self>>
     where
-        R: ::rand::RngCore + ::rand::CryptoRng,
+        R: crate::backend_rand::RngCore + crate::backend_rand::CryptoRng,
     {
         ensure!(
             threshold as usize <= shards,
@@ -123,7 +139,7 @@ impl MultiEd25519KeyShard {
         let signatures: Vec<(Ed25519Signature, u8)> = self
             .private_keys
             .iter()
-            .map(|(i, item)| (item.sign(message).expect("sign message failed"), *i as u8))
+            .map(|(i, item)| (sign_message(item, message), *i as u8))
             .collect();
 
         MultiEd25519SignatureShard::new(
@@ -345,7 +361,7 @@ impl TryFrom<Vec<MultiEd25519SignatureShard>> for MultiEd25519SignatureShard {
     }
 }
 
-#[allow(clippy::derive_hash_xor_eq)]
+#[allow(clippy::derived_hash_with_manual_eq)]
 impl std::hash::Hash for MultiEd25519SignatureShard {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         let encoded_signature = self.to_bytes();

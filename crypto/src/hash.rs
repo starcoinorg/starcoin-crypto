@@ -1,8 +1,13 @@
 // Copyright (c) The Starcoin Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-pub use aptos_crypto::hash::{
+#[cfg(feature = "compiler-v2")]
+pub use crate::crypto_backend::hash::{
     CryptoHash, CryptoHasher, DefaultHasher, DummyHasher, HashValue, TestOnlyHash,
+};
+#[cfg(all(feature = "compiler-v1", not(feature = "compiler-v2")))]
+pub use crate::crypto_backend::hash::{
+    CryptoHash, CryptoHasher, DefaultHasher, HashValue, TestOnlyHash,
 };
 use once_cell::sync::Lazy;
 pub use starcoin_crypto_macro::{CryptoHash, CryptoHasher};
