@@ -46,7 +46,7 @@ neptune = { version = "13.0.0", default_features = false }
 num-bigint = { version = "0.3.2", features = ["rand"] }
 num-integer = "0.1.42"
 once_cell = "1.10.0"
-openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "1f2f7d3495e3bd3ef3b6fcf7c4e0602cad090d5e" }
+openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "ede68cb6bd9cee80225ac978a9b982c2c5617d0f" }
 p256 = { version = "0.13.2" }
 poseidon-ark = { git = "https://github.com/arnaucube/poseidon-ark.git", rev = "6d2487aa1308d9d3860a2b724c485d73095c1c68" }
 proc-macro2 = "1.0.18"
