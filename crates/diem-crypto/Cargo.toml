@@ -42,7 +42,7 @@ aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
 openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "ede68cb6bd9cee80225ac978a9b982c2c5617d0f" }
-crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "c350ab8d2b61f24d4a6102e5797a29b3950b92b2", default-features = false, features = ["fuzzing"] }
+crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "37a238a5da1e7897944631097a9192e8fcd7e822", default-features = false, features = ["fuzzing"] }
 
 [dev-dependencies]
 bitvec = "0.19.4"
