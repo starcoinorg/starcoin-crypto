@@ -41,7 +41,7 @@ x25519-dalek = { version = "0.1.0", package = "x25519-dalek-fiat", default-featu
 aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
-openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "1f2f7d3495e3bd3ef3b6fcf7c4e0602cad090d5e" }
+openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "ede68cb6bd9cee80225ac978a9b982c2c5617d0f" }
 crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "c350ab8d2b61f24d4a6102e5797a29b3950b92b2", default-features = false, features = ["fuzzing"] }
 
 [dev-dependencies]
