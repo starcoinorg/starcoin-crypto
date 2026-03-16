@@ -193,9 +193,9 @@ fn hash(data: &[u8]) -> Vec<u8> {
 fn hkdf(ck: &[u8], dh_output: Option<&[u8]>) -> Result<(Vec<u8>, Vec<u8>), NoiseError> {
     let dh_output = dh_output.unwrap_or(&[]);
     let hkdf_output = if dh_output.is_empty() {
-        Hkdf::<sha2::Sha256>::extract_then_expand_no_ikm(Some(ck), None, 64)
+        Hkdf::<sha2_0_10_6::Sha256>::extract_then_expand_no_ikm(Some(ck), None, 64)
     } else {
-        Hkdf::<sha2::Sha256>::extract_then_expand(Some(ck), dh_output, None, 64)
+        Hkdf::<sha2_0_10_6::Sha256>::extract_then_expand(Some(ck), dh_output, None, 64)
     };
 
     let hkdf_output = hkdf_output.map_err(|_| NoiseError::Hkdf)?;

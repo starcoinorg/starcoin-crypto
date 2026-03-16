@@ -17,8 +17,8 @@ use criterion::{
 use digest::Digest;
 use rand::thread_rng;
 use sha2::{Sha256, Sha512};
+use sha3::Keccak256;
 use std::ptr::null;
-use tiny_keccak::{Hasher as KeccakHasher, Keccak};
 
 /// Runs all the benchmarks.
 fn bench_group(c: &mut Criterion) {
@@ -132,12 +132,9 @@ fn keccak256<M: Measurement>(g: &mut BenchmarkGroup<M>, n: usize) {
             |bytes| {
                 assert_eq!(bytes.len(), n);
 
-                let mut hasher = Keccak::v256();
-                hasher.update(&bytes);
-
-                let mut output = [0u8; 32];
-                hasher.finalize(&mut output);
-
+                let mut hasher = Keccak256::new();
+                hasher.update(bytes);
+                let output = hasher.finalize();
                 assert_eq!(output.as_slice().len(), 32);
             },
         )

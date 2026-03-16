@@ -13,7 +13,11 @@ static PARTIAL_ROUNDS: Lazy<Vec<usize>> = Lazy::new(|| {
     ]
 });
 
-static BN254_CONSTANTS: Lazy<(Vec<Vec<AltFr>>, Vec<Vec<Vec<AltFr>>>)> = Lazy::new(constants);
+type RoundConstants = Vec<Vec<AltFr>>;
+type MdsMatrices = Vec<Vec<Vec<AltFr>>>;
+type Bn254Constants = (RoundConstants, MdsMatrices);
+
+static BN254_CONSTANTS: Lazy<Bn254Constants> = Lazy::new(constants);
 
 macro_rules! neptune_constants {
     ($constants:expr, $matrices:expr, $ui:ty) => {{
@@ -65,7 +69,7 @@ pub(crate) static POSEIDON_16: Lazy<PoseidonConstants<AltFr, U16>> =
 
 /// Returns BN254-specific Poseidon constants.
 /// From https://github.com/arnaucube/poseidon-rs/blob/master/src/constants.rs.
-pub fn constants() -> (Vec<Vec<AltFr>>, Vec<Vec<Vec<AltFr>>>) {
+pub fn constants() -> Bn254Constants {
     let c_str: Vec<Vec<AltFr>> = vec![
         vec![
             "4417881134626180770308697923359573201005643519861877412381846989312604493735".into(),
