@@ -75,12 +75,11 @@
 //! assert_eq!(derived_bytes.unwrap().len(), 64)
 //! ```
 
-use digest::{
-    generic_array::{self, ArrayLength},
-    BlockInput, FixedOutput, Reset, Update,
+use hkdf::hmac::digest::{
+    core_api::BlockSizeUser,
+    typenum::{IsGreaterOrEqual, True, U32},
+    Digest,
 };
-
-use generic_array::typenum::{IsGreaterOrEqual, True, U32};
 
 use std::marker::PhantomData;
 use thiserror::Error;
@@ -99,9 +98,7 @@ const MINIMUM_SEED_LENGTH: usize = 16;
 #[derive(Clone, Debug)]
 pub struct Hkdf<D>
 where
-    D: Update + BlockInput + FixedOutput + Reset + Default + Clone,
-    D::BlockSize: ArrayLength<u8>,
-    D::OutputSize: ArrayLength<u8>,
+    D: Digest + BlockSizeUser + Clone,
     D::OutputSize: IsGreaterOrEqual<DMinimumSize, Output = True>,
 {
     _marker: PhantomData<D>,
@@ -109,9 +106,7 @@ where
 
 impl<D> Hkdf<D>
 where
-    D: Update + BlockInput + FixedOutput + Reset + Default + Clone,
-    D::BlockSize: ArrayLength<u8> + Clone,
-    D::OutputSize: ArrayLength<u8>,
+    D: Digest + BlockSizeUser + Clone,
     D::OutputSize: IsGreaterOrEqual<DMinimumSize, Output = True>,
 {
     /// The RFC5869 HKDF-Extract operation.
@@ -123,7 +118,7 @@ where
     }
 
     fn extract_no_ikm_check(salt: Option<&[u8]>, ikm: &[u8]) -> Vec<u8> {
-        let (arr, _hkdf) = hkdf::Hkdf::<D>::extract(salt, ikm);
+        let (arr, _hkdf) = hkdf::SimpleHkdf::<D>::extract(salt, ikm);
         arr.to_vec()
     }
 
@@ -136,10 +131,10 @@ where
             return Err(HkdfError::InvalidOutputLengthError);
         }
 
-        let hkdf =
-            hkdf::Hkdf::<D>::from_prk(prk).map_err(|_| HkdfError::WrongPseudorandomKeyError)?;
+        let hkdf = hkdf::SimpleHkdf::<D>::from_prk(prk)
+            .map_err(|_| HkdfError::WrongPseudorandomKeyError)?;
         let mut okm = vec![0u8; length];
-        hkdf.expand(info.unwrap_or_else(|| &[]), &mut okm)
+        hkdf.expand(info.unwrap_or(&[]), &mut okm)
             // length > D::OutputSize::to_usize() * 255
             .map_err(|_| HkdfError::InvalidOutputLengthError)?;
         Ok(okm)

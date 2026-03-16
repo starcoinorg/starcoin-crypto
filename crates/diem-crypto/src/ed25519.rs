@@ -29,7 +29,7 @@
 //! ```
 //! **Note**: The above example generates a private key using a private function intended only for
 //! testing purposes. Production code should find an alternate means for secure key generation.
-#![allow(clippy::integer_arithmetic)]
+#![allow(clippy::arithmetic_side_effects)]
 
 use crate::{
     hash::{CryptoHash, CryptoHasher},
@@ -340,7 +340,7 @@ impl VerifyingKey for Ed25519PublicKey {
 
 impl fmt::Display for Ed25519PublicKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", hex::encode(&self.0.as_bytes()))
+        write!(f, "{}", hex::encode(self.0.as_bytes()))
     }
 }
 

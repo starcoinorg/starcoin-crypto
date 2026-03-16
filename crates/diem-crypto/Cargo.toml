@@ -15,13 +15,13 @@ bytes = "1.6.1"
 curve25519-dalek = { version = "0.1.0", package = "curve25519-dalek-fiat", default-features = false, features = [
     "std",
 ] }
-digest = "0.9.0"
+digest = "0.10.7"
 ed25519-dalek = { version = "0.1.0", package = "ed25519-dalek-fiat", default-features = false, features = [
     "std",
     "serde",
 ] }
 hex = "0.4.3"
-hkdf = "0.10.0"
+hkdf = "0.12.4"
 once_cell = "1.7.2"
 mirai-annotations = "1.10.1"
 proptest = { version = "1.0.0", optional = true }
@@ -31,7 +31,7 @@ rand_core = { version = "0.6.2", default-features = false }
 serde = { version = "1.0.124", features = ["derive"] }
 serde_bytes = "0.11.5"
 serde-name = "0.1.1"
-sha2 = "0.9.3"
+sha2 = "0.10.8"
 static_assertions = "1.1.0"
 thiserror = "1.0.24"
 tiny-keccak = { version = "2.0.2", features = ["sha3"] }
@@ -41,8 +41,8 @@ x25519-dalek = { version = "0.1.0", package = "x25519-dalek-fiat", default-featu
 aes-gcm = "0.8.0"
 diem-crypto-derive = { path = "../diem-crypto-derive", version = "0.0.3" }
 bcs = "0.1.2"
-openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "1f2f7d3495e3bd3ef3b6fcf7c4e0602cad090d5e" }
-crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "c350ab8d2b61f24d4a6102e5797a29b3950b92b2", default-features = false, features = ["fuzzing"] }
+openrpc-schema = { git = "https://github.com/starcoinorg/openrpc-rs", rev = "ede68cb6bd9cee80225ac978a9b982c2c5617d0f" }
+crypto-common = { git = "https://github.com/starcoinorg/crypto-common", rev = "37a238a5da1e7897944631097a9192e8fcd7e822", default-features = false, features = ["fuzzing"] }
 
 [dev-dependencies]
 bitvec = "0.19.4"
@@ -50,8 +50,9 @@ byteorder = "1.4.3"
 proptest = "1.4.0"
 proptest-derive = "0.3.0"
 ripemd160 = "0.9.1"
-criterion = "0.3.4"
-sha3 = "0.9.1"
+criterion = "0.5.1"
+rand07 = { package = "rand", version = "0.7.3" }
+sha3 = "0.10.8"
 serde_json = "1.0.64"
 trybuild = "1.0.41"
 
@@ -75,6 +76,7 @@ u32 = [
     "ed25519-dalek/u32_backend",
     "x25519-dalek/u32_backend",
 ]
+batch = []
 
 [[bench]]
 name = "noise"

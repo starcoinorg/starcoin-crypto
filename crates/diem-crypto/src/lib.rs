@@ -3,6 +3,7 @@
 
 //! This feature gets turned on only if diem-crypto is compiled via MIRAI in a nightly build.
 #![cfg_attr(mirai, allow(incomplete_features), feature(const_generics))]
+#![allow(unexpected_cfgs)]
 
 //! A library supplying various cryptographic primitives
 pub mod compat;
